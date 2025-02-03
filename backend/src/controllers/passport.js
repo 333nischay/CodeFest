@@ -13,10 +13,11 @@ const PassportConfig = (passport) => {
           const email = profile.emails[0].value ;
           let user = await User.findOne({ email});
           if (!user) {
-            user = new User({
+            user = await User.create({
               googleId: profile.id,
               name: profile.displayName,
               email: profile.emails[0].value,
+              isVerified: true,
             });
             await user.save();
           }
@@ -30,6 +31,7 @@ const PassportConfig = (passport) => {
                 }
             }
             else{
+                user.isVerified = true;
                 user.googleId = profile.id;
                 await user.save();
             }
