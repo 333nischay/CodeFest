@@ -8,7 +8,6 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import Editor from "./Editor/Editor.jsx";
 import Login from "./Authentication/Login.jsx";
 import PrivateRoute from "./router/PrivateRoute.jsx";
 import Register from "./Authentication/Register.jsx";
@@ -25,7 +24,6 @@ const router = createBrowserRouter(
 
     <Route path="/" element={<App />}>
       <Route path="/" element={<LandingPage/>} />
-      <Route path="/Editor" element={<PrivateRoute><Editor /></PrivateRoute>} />
       <Route path="/workspace/:id" element={<PrivateRoute><WorkSpace/></PrivateRoute>} />
       <Route path="/createWorkspace" element={<PrivateRoute><CreateWorkspace /></PrivateRoute>} />
       <Route path="/openWorkspace" element={<PrivateRoute><OpenExistingWorkspace /></PrivateRoute>} />
