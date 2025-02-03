@@ -111,6 +111,10 @@ const LeftSidebar = ({ Data ,addFile,fontSize, onFontSizeChange, theme, onThemeT
     }
   };
   const handleDeleteFolder = async (folderId,parentId) => { 
+    if(folderId === data._id){
+      console.log("Not Allowed");
+      return;
+    }
     try {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/folder/delete/${folderId}`, {
         method: 'DELETE',

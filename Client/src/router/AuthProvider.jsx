@@ -236,8 +236,31 @@ const AuthProvider = ({ children }) => {
       console.error(err);
     }
   }
+  const googleLogin = async()=>{
+    const popup = window.open(`${backend_Url}/api/v1/users/google`, 'oauth2', 'width=500,height=600');
+  
+      // Listen for messages from the popup window
+      window.addEventListener('message', (event) => {
+        console.log(event.origin);
+        if (event.origin !== backend_Url) return; // Ensure the message is from the backend
+        console.log(event.data);
+        const { accessToken, refreshToken } = event.data;
+  
+        if(accessToken && refreshToken){
+          setToken(accessToken);
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        setInfo(JSON.stringify(decodeToken(accessToken)));
+              
+        popup.close();
+        navigate('/');
+        }
+        return;
+  
+      });
+  }
   return (
-    <AuthContext.Provider value={{ info,backend_Url,token, loginAction, logOut,Register,verifyRegistration,forgotPassword,verifyForgotPassword }}>
+    <AuthContext.Provider value={{ info,backend_Url,token, loginAction, logOut,Register,verifyRegistration,forgotPassword,verifyForgotPassword ,googleLogin}}>
       {children}
     </AuthContext.Provider>
   );

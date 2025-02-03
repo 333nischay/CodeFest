@@ -34,13 +34,14 @@ const OpenExistingWorkspace = () => {
   return (
     <>
     <div className='w-screen flex flex-col mt-20 items-center'>
-        <div className='flex flex-row w-full justify-center gap-20 my-36 items-center'></div>
+        <div className='flex flex-row w-full justify-center gap-20 my-36 items-center'>
      {workSpaces.map((workspace) => (
         <Link to={`/workspace/${workspace._id}`} key={workspace._id} className='cursor-pointer border h-48 w-48 p-4 rounded-xl text-center text-while hover:bg-blue-700 hover:text-white'>
           <h1>{workspace.name}</h1>
           <p>{workspace.description}</p>
         </Link>
       ))}
+      </div>
       </div>
     </>
   )

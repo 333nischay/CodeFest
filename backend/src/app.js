@@ -5,6 +5,8 @@ dotenv.config()
 import cookieParser from 'cookie-parser'
 import { ApiError } from './utils/ApiError.js'
 import { ApiResponse } from './utils/ApiResponse.js'
+import passport from 'passport'
+import PassportConfig from './controllers/passport.js'
 const app = express();
 const corsOptions = {
     credentials: true,
@@ -13,6 +15,7 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'],
     exposedHeaders: ['set-cookie']
 };
+PassportConfig(passport);
 app.use(cors(corsOptions))
 app.use(express.json({limit: '50kb'}));
 app.use(cookieParser());

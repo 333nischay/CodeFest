@@ -11,7 +11,7 @@ const Navbar = () => {
   return (
     <div className='fixed top-0 h-20 w-full bg-blue-950 text-white'>
         <div className='flex items-center justify-between h-full px-4'>
-            <h1 className='text-2xl'>CodeEditor</h1>
+            <h1 className='text-2xl'>Codeditor</h1>
             <div className='flex items-center gap-4'>
             <Link to='/Editor'>Editor</Link>
             {auth.token && <button onClick={Logout} className='cursor-pointer'>Logout</button>}

@@ -101,7 +101,7 @@ const getWorkSpace = asynchandler(async (req, res) => {
     if (!workspace) {
         throw new ApiError(400, "Workspace not found");
     }
-    if (!workspace.contributors.includes(req.user._id) && workspace.userId.toString() !== req.user._id.toString()) {
+    if (workspace.type === "private" && !workspace.contributors.includes(req.user._id) && workspace.userId.toString() !== req.user._id.toString()) {
         throw new ApiError(400, "User not allowed");
     }
     console.log(workspace.rootFolder);

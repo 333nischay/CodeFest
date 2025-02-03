@@ -5,6 +5,7 @@ import { User } from "../models/user.model.js";
 import { Folder } from "../models/folder.model.js";
 import { sendMail } from "../utils/sendMail.js";
 import {jwtDecode} from "jwt-decode";
+import passport from "passport";
 const register = asynchandler(async (req, res) => {
     const { name, email, password } = req.body;
     if([name,password,email].some((field)=>field?.trim === "")){
@@ -188,5 +189,45 @@ const verifyForgotPassword = asynchandler(async (req, res) => {
     await user.save();
     return res.json(new ApiResponse(200,{message:"OTP verified successfully"}))
 });
+const googleLogin = asynchandler(async (req, res) => {
+    try {
+        passport.authenticate("google", { scope: ["profile", "email"] })(req, res);   
+    } catch (error) {
+        console.log(error);
+    }
+});
 
-export { register,verifyOtpRegistration,login,logOut,refreshAccessToken ,getWorkSpace,forgotPassword,verifyForgotPassword}
+const googleCallback = asynchandler(async (req, res, next) => {
+    passport.authenticate("google", { failureRedirect: "/login" }, (err, user, info) => {
+        if (err) {
+            throw new ApiError(500, err.message);
+        }
+        if(user){
+            const accessToken = user.generateAccessToken();
+            const refreshToken = user.generateRefreshToken();
+            user.refreshToken = refreshToken;
+            user.save();
+            const options = {
+                httpOnly: true,
+                secure: true
+            }
+            const script = `
+            <script>
+                window.opener.postMessage({
+                    accessToken: '${accessToken}',
+                    refreshToken: '${refreshToken}'
+                }, '${process.env.CORS_ORIGIN}');
+                window.close();
+            </script>
+        `;
+
+        // Send the script to the frontend
+        return res.status(200).send(script);
+        }
+        
+    })(req, res);
+});
+
+
+
+export { register,verifyOtpRegistration,login,logOut,refreshAccessToken ,getWorkSpace,forgotPassword,verifyForgotPassword,googleLogin,googleCallback}

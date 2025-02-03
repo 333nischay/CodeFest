@@ -10,7 +10,7 @@ const Editor = ({ Data }) => {
   const [activeTab, setActiveTab] = useState(0);
   const socket = io(import.meta.env.VITE_BACKEND_URL);
   const editorRef = useRef(null);
-
+  const [Saving, setSaving] = useState(false);
   useEffect(() => {
     socket.emit("joinWorkspace", data.data._id);
 
@@ -106,7 +106,8 @@ const Editor = ({ Data }) => {
     }
   };
   const handleSave = async () => {
-    const data1 = {content: currentCode};
+    setSaving(true);
+    const data1 = {content: tabFiles[activeTab].content};
     try {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/file/save/${tabFiles[activeTab].id}`, {
         method: 'PUT',
@@ -130,9 +131,11 @@ const Editor = ({ Data }) => {
       };
 
       setData(updateData(data));
+      setSaving(false);
       console.log("saved");
 
     } catch (error) {
+      setSaving(false);
       console.log(error);
     }
   }
@@ -186,7 +189,7 @@ const Editor = ({ Data }) => {
               </div>
             ))}
           </div>
-          <button onClick={()=>{handleSave()}} className="mx-2 px-2 border rounded cursor-pointer my-2 hover:bg-blue-700 hover:text-white">Save</button>
+          <button onClick={()=>{handleSave()}} className="mx-2 px-2 border rounded cursor-pointer my-2 hover:bg-blue-700 hover:text-white">{Saving?"Saving..":"Save"}</button>
 
 
         </div>
@@ -203,7 +206,9 @@ const Editor = ({ Data }) => {
               onMount={handleEditorDidMount}
             />
           )}
+          <div className="z-10 fixed">
           <ChatAI />
+          </div>
         </div>
       </div>
       {tabFiles.length > 0 && <SideBar

@@ -35,11 +35,16 @@ const Monaco = ({ file, language, onCodeChange, fontSize, theme }) => {
   useEffect(() => {
     if (editorRef.current) {
       const model = editorRef.current.getModel();
-      const currentPosition = editorRef.current.getPosition();
-      setCode(file);
-      editorRef.current.setValue(file);
-      editorRef.current.setPosition(currentPosition);
-      editorRef.current.focus();
+      if (model && model.getValue() !== file) {
+        const currentPosition = editorRef.current.getPosition();
+        model.pushEditOperations(
+          [],
+          [{ range: model.getFullModelRange(), text: file }],
+          () => null
+        );
+        editorRef.current.setPosition(currentPosition);
+        editorRef.current.focus();
+      }
     }
   }, [file]);
 
@@ -146,6 +151,17 @@ const Monaco = ({ file, language, onCodeChange, fontSize, theme }) => {
       setCompletion('');
     }
   };
+  const handleUndo = () => {
+    if (editorRef.current) {
+      editorRef.current.trigger('keyboard', 'undo');
+    }
+  };
+  
+  const handleRedo = () => {
+    if (editorRef.current) {
+      editorRef.current.trigger('keyboard', 'redo');
+    }
+  };
 
   return (
     <div className="h-[97vh] w-full flex flex-col relative">
@@ -182,6 +198,14 @@ const Monaco = ({ file, language, onCodeChange, fontSize, theme }) => {
     </div>
   </div>
 )}
+<div className="flex flex-row gap-2">
+<button onClick={handleUndo} className="bg-blue-700 w-16 text-white px-3 py-1 rounded">
+  Undo
+</button>
+<button onClick={handleRedo} className="bg-blue-700 w-16 text-white px-3 py-1 rounded">
+  Redo
+</button>
+</div>
 
 <div className="flex-grow">
         <Editor
@@ -192,7 +216,11 @@ const Monaco = ({ file, language, onCodeChange, fontSize, theme }) => {
           value={code}
           onChange={handleEditorChange}
           onMount={handleEditorDidMount}
-          options={{ fontSize: fontSize }}
+          options={{ fontSize: fontSize, 
+
+            automaticLayout: true,
+    undoRedo: true, // Explicitly enable undo/redo
+          }}
         />
       </div>
       <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10 flex gap-2">
