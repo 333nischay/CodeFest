@@ -50,6 +50,7 @@ const Login = () => {
               <input disabled={isSubmitting} value={isSubmitting?"Submitting...": "Submit"} type="submit" className='border rounded w-1/2 mx-auto py-2 cursor-pointer hover:bg-blue-600 hover:text-white' />
            </form>
            <p className='text-sm'>New User? <Link to='/register' className='underline cursor-pointer'>Register</Link></p>
+           <Link to='/forgotPassword' className='underline cursor-pointer'>Forgot Password</Link>
   
            
            

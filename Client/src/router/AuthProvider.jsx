@@ -183,8 +183,61 @@ const AuthProvider = ({ children }) => {
       console.error(err);
     }
   }
+  const forgotPassword = async(data)=>{
+    try{
+      const response = await fetch(`${backend_Url}/api/v1/users/forgotPassword`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(data),
+      })
+       const res = await response.json();
+       console.log(res)
+       if (res.statusCode == 200) {
+        
+        console.log(res.message);      
+        return true;
+      }
+
+    }catch(err){
+      console.log("Error while registration")
+    }
+  }
+  const verifyForgotPassword = async(data)=>{
+    try {
+      const response = await fetch(`${backend_Url}/api/v1/users/verifyForgotPassword`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(data),
+      })
+      if (!response.ok) {
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Something went wrong');
+        } else {
+          throw new Error('Unexpected response format');
+        }
+      }
+       const res = await response.json();
+       
+      
+      if(res.statusCode == 200) {
+        
+        console.log(res.message);      
+        return true;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
   return (
-    <AuthContext.Provider value={{ info,backend_Url,token, loginAction, logOut,Register,verifyRegistration }}>
+    <AuthContext.Provider value={{ info,backend_Url,token, loginAction, logOut,Register,verifyRegistration,forgotPassword,verifyForgotPassword }}>
       {children}
     </AuthContext.Provider>
   );

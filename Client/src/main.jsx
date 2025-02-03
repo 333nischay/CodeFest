@@ -18,6 +18,7 @@ import CreateWorkspace from "./components/CreateWorkspace.jsx";
 import WorkSpaceInvitation from "./router/WorkSpaceInvitation.jsx";
 import WorkSpace from "./components/WorkSpace.jsx";
 import OpenExistingWorkspace from "./components/OpenExistingWorkspace.jsx";
+import ForgotPassword from "./Authentication/ForgotPassword.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
       <Route path="/openWorkspace" element={<PrivateRoute><OpenExistingWorkspace /></PrivateRoute>} />
       <Route path="/workspaceInvite" element={<PrivateRoute><WorkSpaceInvitation /></PrivateRoute>} />
       <Route path="/Login" element={<LoginRoute><Login /></LoginRoute>} />
+      <Route path="/forgotPassword" element={<LoginRoute><ForgotPassword /></LoginRoute>} />
       <Route path="/register" element={<LoginRoute><Register /></LoginRoute>} />
     </Route>
   )

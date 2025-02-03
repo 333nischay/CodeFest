@@ -150,5 +150,43 @@ const getWorkSpace = asynchandler(async (req, res) => {
     }
     return res.json(new ApiResponse(200,{workSpaces:user.workSpace}));
 });
+const forgotPassword = asynchandler(async (req, res) => {  
+    const { email } = req.body;
+    if(!email){
+        throw new ApiError(400,"Email is required")
+    }
+    const user = await User.findOne({email});
+    if(!user){
+        throw new ApiError(404,"User not found")
+    }
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    user.otp = otp;
+    await user.save();
+    const mailHtml = `Your OTP is ${otp}`;
+    try {
+        await sendMail(email,"OTP for verification",mailHtml);
+    } catch (error) {
+        throw new ApiError(500,error.message);
+        
+    }
+    return res.json(new ApiResponse(200,{message:"OTP sent successfully"}))
+});
+const verifyForgotPassword = asynchandler(async (req, res) => {
+    const {email, otp ,password} = req.body;
+    if([email,otp,password].some((field)=>field?.trim === "")){
+        throw new ApiError(400,"All fields are required")
+    }
+    const user = await User.findOne({email});
+    if(!user){
+        throw new ApiError(400,"User not found")
+    }
+    if(!await user.checkOTP(otp)){
+        throw new ApiError(400,"Invalid OTP")
+    };
+    user.otp = null;
+    user.password = password;
+    await user.save();
+    return res.json(new ApiResponse(200,{message:"OTP verified successfully"}))
+});
 
-export { register,verifyOtpRegistration,login,logOut,refreshAccessToken ,getWorkSpace}
+export { register,verifyOtpRegistration,login,logOut,refreshAccessToken ,getWorkSpace,forgotPassword,verifyForgotPassword}
