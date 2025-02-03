@@ -146,3 +146,17 @@ This project is licensed under the ISC License.
 - Vinayak Palya
 - Nirved Mishra
 - Nischay Sinha
+# CodeFest - Collaborative Code Editor Platform
+
+CodeFest is a modern, feature-rich collaborative code editing platform that combines real-time collaboration, AI-powered assistance, and workspace management capabilities. It provides developers with a seamless environment for coding, sharing, and executing code.
+
+## 🚀 Features
+
+### Core Features
+- **Real-time Collaborative Editing**: Multiple users can work on the same codebase simultaneously
+- **Workspace Management**: Create and manage multiple workspaces with different access levels
+- **File System**: Hierarchical file and folder structure management
+
+## 🌐 Hosted Website
+
+You can access the CodeEditor platform at [https://code-fest-six.vercel.app/](https://code-fest-six.vercel.app/)
