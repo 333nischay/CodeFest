@@ -10,7 +10,7 @@ const folderSchema = new Schema({
     },
     children: [{ type: Schema.Types.ObjectId, ref: 'Folder' }],
     files: [{ type: Schema.Types.ObjectId, ref: 'File' }],
-    workspaceId: { type: Schema.Types.ObjectId, ref: 'WorkSpace' },
+    workspaceId: { type: Schema.Types.ObjectId, ref: 'WorkSpace'},
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
